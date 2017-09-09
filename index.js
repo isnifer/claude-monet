@@ -24,10 +24,11 @@ class Monet {
       const themeWithModifiers = this.modifiers[theme] || {}
       this.modifiers[theme] = {
         ...themeWithModifiers,
-        [modifier]: styles
+        [modifier]: styles,
       }
     } else {
       this.themes[theme] = styles
+      this.modifiers[theme] = this.modifiers[theme] || {}
     }
   }
 }
@@ -47,11 +48,13 @@ export const withTheme = (theme, modifiers = []) => WrappedComponent => props =>
       monet: StyleSheet.create(
         mergeWith(
           monet.themes[theme],
-          modifiers.reduce((memo, modifierName) => {
-            return { ...memo, ...monet.modifiers[theme][modifierName] }
-          }, {})
+          modifiers.reduce((memo, modifierName) => ({
+            ...memo,
+            ...monet.modifiers[theme][modifierName],
+          }), {}),
+          customizer
         )
-      )
+      ),
     }
   )
 )

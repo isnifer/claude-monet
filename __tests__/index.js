@@ -1,24 +1,32 @@
+import 'react-native'
 import React from 'react'
-import { Text } from 'react-native'
-import test from 'tape'
-import render from 'react-test-renderer'
 import Monet, { withTheme } from '../'
+import renderer from 'react-test-renderer'
+import SuperText from './SuperText'
 
-test('foo', t => {
-  t.pass('lol kek')
+test('Renders <SuperText /> w/out modifiers', () => {
+  Monet.create({
+    container: { flex: 1 },
+    text: { color: 'red' }
+  }, 'SuperText')
 
-  Monet.create({ color: 'red' }, 'SuperText')
+  const ThemedComponent = withTheme('SuperText')(SuperText)
+  const tree = renderer.create(
+    <ThemedComponent />
+  ).toJSON()
 
-  let SuperText = (props) => {
-    console.log(props)
-    return (
-      React.createElement(Text, { style: props.monet }, 'Claude Monet')
-    )
-  }
+  expect(tree).toMatchSnapshot()
+})
 
-  SuperText = withTheme('SuperText')(SuperText)
+test('Renders <SuperText /> with Green modifier', () => {
+  Monet.create({
+    text: { color: 'green' }
+  }, 'SuperText:Green')
 
-  console.log(
-    render.create(React.createElement(SuperText)).toJSON()
-  )
+  const ThemedComponent = withTheme('SuperText', ['Green'])(SuperText)
+  const tree = renderer.create(
+    <ThemedComponent />
+  ).toJSON()
+
+  expect(tree).toMatchSnapshot()
 })
