@@ -1,6 +1,6 @@
 {
   "name": "claude-monet",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Higher-Order Component for Theming Components",
   "main": "index.js",
   "peerDependencies": {
@@ -8,7 +8,6 @@
     "react-native": ">=40"
   },
   "dependencies": {
-    "lodash.isarray": "^4.0.0",
     "lodash.mergewith": "^4.6.0"
   },
   "devDependencies": {

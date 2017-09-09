@@ -1,7 +1,6 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import mergeWith from 'lodash.mergewith'
-import isArray from 'lodash.isarray'
 
 /*
   export default connect(mapStateToProps, mapDispatchToProps)(
@@ -37,7 +36,7 @@ const monet = new Monet()
 
 // Prevent merging arrays
 const customizer = (objValue, srcValue) => (
-  isArray(objValue) ? srcValue : undefined
+  Array.isArray(objValue) ? srcValue : undefined
 )
 
 export const withTheme = (theme, modifiers = []) => WrappedComponent => props => (
