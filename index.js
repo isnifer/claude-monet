@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import mergeWith from 'lodash.mergewith'
+import get from 'lodash.get'
 
 /*
   // Component
@@ -84,7 +85,7 @@ export const withTheme = (theme, modifiers = []) => WrappedComponent => props =>
           {},
           monet.base[theme],
           monet.themes[theme],
-          modifiers.reduce((memo, name) => mergeWith(memo, monet.modifiers[theme][name]), {})
+          modifiers.reduce((memo, name) => mergeWith(memo, get(monet.modifiers, theme, name)), {})
         )
       ),
     }
