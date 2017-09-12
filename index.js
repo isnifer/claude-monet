@@ -48,13 +48,14 @@ import mergeWith from 'lodash.mergewith'
 class Monet {
   constructor({ delimiter = ':' } = {}) {
     this.delimiter = delimiter
+    this.base = {}
     this.themes = {}
     this.modifiers = {}
   }
 
   create = (theme, styles) => {
-    this.themes[theme] = styles
-    return StyleSheet.create(this.themes[theme])
+    this.base[theme] = styles
+    return StyleSheet.create(mergeWith(styles, this.themes[theme]))
   }
 
   theme = (name, styles) => {
@@ -67,41 +68,31 @@ class Monet {
         [modifier]: styles,
       }
     } else {
-      this.themes[theme] = mergeWith({}, this.themes[theme], styles)
+      this.themes[theme] = styles
     }
   }
 }
 
 const monet = new Monet()
 
-// Prevent merging arrays
-const customizer = (objValue, srcValue) => (
-  Array.isArray(objValue) ? srcValue : undefined
-)
-
-export const withTheme = (theme, modifiers = []) => WrappedComponent => props => {
-  return React.createElement(
+export const withTheme = (theme, modifiers = []) => WrappedComponent => props => (
+  React.createElement(
     WrappedComponent, {
       ...props,
       monet: StyleSheet.create(
         mergeWith(
           {},
+          monet.base[theme],
           monet.themes[theme],
-          modifiers.reduce((memo, name) => mergeWith(memo, monet.modifiers[theme][name]), {}),
-          customizer
+          modifiers.reduce((memo, name) => mergeWith(memo, monet.modifiers[theme][name]), {})
         )
       ),
     }
   )
-}
+)
 
-export const baseTheme = styles => WrappedComponent => ownProps => {
-  WrappedComponent.defaultProps = {
-    ...WrappedComponent.defaultProps,
-    monet: styles,
-  }
-
-  return React.createElement(WrappedComponent, ownProps)
-}
+export const baseTheme = styles => WrappedComponent => ownProps => (
+  React.createElement(WrappedComponent, { ...ownProps, monet: ownProps.monet || styles })
+)
 
 export default monet
