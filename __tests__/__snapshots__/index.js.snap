@@ -1,10 +1,35 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Renders <Head /> w/out modifiers 1`] = `
+exports[`Renders <Head /> w/out withTheme 1`] = `
+<View
+  style={
+    Object {
+      "flex": 1,
+    }
+  }
+>
+  <Text
+    accessible={true}
+    allowFontScaling={true}
+    disabled={false}
+    ellipsizeMode="tail"
+    style={
+      Object {
+        "color": "purple",
+      }
+    }
+  >
+    Head Component
+  </Text>
+</View>
+`;
+
+exports[`Renders <Head /> with Head theme 1`] = `
 <View
   style={
     Object {
       "borderRadius": 3,
+      "flex": 1,
     }
   }
 >
@@ -24,11 +49,12 @@ exports[`Renders <Head /> w/out modifiers 1`] = `
 </View>
 `;
 
-exports[`Renders <Head /> with Green modifier 1`] = `
+exports[`Renders <Head /> with Head:Green modifier 1`] = `
 <View
   style={
     Object {
       "borderRadius": 3,
+      "flex": 1,
     }
   }
 >

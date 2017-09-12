@@ -3,11 +3,46 @@ import { StyleSheet } from 'react-native'
 import mergeWith from 'lodash.mergewith'
 
 /*
+  // Component
+
+  import Monet, { baseTheme } from 'claude-monet'
+
+  class SearchComponent extends Component {
+    // ...
+  }
+
+  const styles = Monet.create('SearchComponent', {
+    container: {
+      flex: 1,
+    },
+  })
+
   export default connect(mapStateToProps, mapDispatchToProps)(
-    withTheme('SearchComponent', {
-      modifiers: ['gold'],
-    })(SearchComponent)
+    baseTheme(styles)(SearchComponent)
   )
+*/
+
+/*
+  // Elsewhere in the Application
+
+  import SearchComponent from '../components/SearchComponent'
+  import { withTheme } from 'claude-monet'
+
+  const ThemedSearchComponent = withTheme('SearchComponent', ['Gold'])(SearchComponent)
+
+  class SearchPage extends Component {
+    render() {
+      return(
+        <View>
+          <ThemedSearchComponent
+            onSearchEnd={this.handleSearchEnd}
+          />
+        </View>
+      )
+    }
+  }
+
+  export default SearchPage
 */
 
 class Monet {
@@ -17,7 +52,12 @@ class Monet {
     this.modifiers = {}
   }
 
-  create = (styles, name) => {
+  create = (theme, styles) => {
+    this.themes[theme] = styles
+    return StyleSheet.create(styles)
+  }
+
+  theme = (name, styles) => {
     const [theme, modifier] = name.split(this.delimiter)
 
     if (modifier) {
@@ -27,8 +67,7 @@ class Monet {
         [modifier]: styles,
       }
     } else {
-      this.themes[theme] = styles
-      this.modifiers[theme] = this.modifiers[theme] || {}
+      this.themes[theme] = mergeWith({}, this.themes[theme], styles)
     }
   }
 }
@@ -40,23 +79,31 @@ const customizer = (objValue, srcValue) => (
   Array.isArray(objValue) ? srcValue : undefined
 )
 
-export const withTheme = (theme, modifiers = []) => WrappedComponent => props => (
-  React.createElement(
-    WrappedComponent,
-    {
+export const withTheme = (theme, modifiers = []) => WrappedComponent => props => {
+  const styles = StyleSheet.create(
+    mergeWith(
+      {},
+      monet.themes[theme],
+      modifiers.reduce((memo, name) => mergeWith(memo, monet.modifiers[theme][name]), {}),
+      customizer
+    )
+  )
+  console.log({ WrappedComponent, props, styles })
+  return React.createElement(
+    WrappedComponent, {
       ...props,
-      monet: StyleSheet.create(
-        mergeWith(
-          monet.themes[theme],
-          modifiers.reduce((memo, modifierName) => ({
-            ...memo,
-            ...monet.modifiers[theme][modifierName],
-          }), {}),
-          customizer
-        )
-      ),
+      monet: styles,
     }
   )
-)
+}
+
+export const baseTheme = styles => WrappedComponent => ownProps => {
+  WrappedComponent.defaultProps = {
+    ...WrappedComponent.defaultProps,
+    monet: styles,
+  }
+
+  return React.createElement(WrappedComponent, ownProps)
+}
 
 export default monet

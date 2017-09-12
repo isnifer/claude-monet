@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 import PropTypes from 'prop-types'
-import Monet, { withTheme } from '../'
+import Monet, { baseTheme } from '../'
 
 class Head extends Component {
   static propTypes = {
@@ -17,13 +17,13 @@ class Head extends Component {
   }
 }
 
-Monet.create({
+const styles = Monet.create('Head', {
   container: {
     flex: 1,
   },
   text: {
     color: 'purple',
   },
-}, 'Head')
+})
 
-export default withTheme('Head')(Head)
+export default baseTheme(styles)(Head)
