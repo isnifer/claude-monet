@@ -54,7 +54,7 @@ class Monet {
 
   create = (theme, styles) => {
     this.themes[theme] = styles
-    return StyleSheet.create(styles)
+    return StyleSheet.create(this.themes[theme])
   }
 
   theme = (name, styles) => {
@@ -80,19 +80,17 @@ const customizer = (objValue, srcValue) => (
 )
 
 export const withTheme = (theme, modifiers = []) => WrappedComponent => props => {
-  const styles = StyleSheet.create(
-    mergeWith(
-      {},
-      monet.themes[theme],
-      modifiers.reduce((memo, name) => mergeWith(memo, monet.modifiers[theme][name]), {}),
-      customizer
-    )
-  )
-  console.log({ WrappedComponent, props, styles })
   return React.createElement(
     WrappedComponent, {
       ...props,
-      monet: styles,
+      monet: StyleSheet.create(
+        mergeWith(
+          {},
+          monet.themes[theme],
+          modifiers.reduce((memo, name) => mergeWith(memo, monet.modifiers[theme][name]), {}),
+          customizer
+        )
+      ),
     }
   )
 }
