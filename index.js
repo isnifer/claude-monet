@@ -85,7 +85,9 @@ export const withTheme = (theme, modifiers = []) => WrappedComponent => props =>
           {},
           monet.base[theme],
           monet.themes[theme],
-          modifiers.reduce((memo, name) => mergeWith(memo, get(monet.modifiers, theme, name)), {})
+          modifiers.reduce((memo, name) => {
+            return mergeWith(memo, get(monet.modifiers, `${theme}.${name}`, {}))
+          }, {}),
         )
       ),
     }
