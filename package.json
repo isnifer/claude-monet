@@ -1,6 +1,6 @@
 {
   "name": "claude-monet",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Higher-Order Component for Theming Components",
   "main": "index.js",
   "peerDependencies": {
@@ -19,10 +19,11 @@
     "jest": "^21.0.2",
     "react": "16.0.0-alpha.12",
     "react-native": "0.47.2",
-    "react-test-renderer": "16.0.0-alpha.12"
+    "react-test-renderer": "16.0.0-alpha.12",
+    "prop-types": "^15.5.10"
   },
   "scripts": {
-    "test": "jest __tests__/index.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",

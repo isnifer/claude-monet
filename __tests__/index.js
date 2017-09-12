@@ -2,15 +2,12 @@ import 'react-native'
 import React from 'react'
 import Monet, { withTheme } from '../'
 import renderer from 'react-test-renderer'
-import SuperText from './SuperText'
+import Head from '../examples/Head'
+import { LeftHand, RightHand } from '../examples/Hands'
+import '../examples/themes/C3PO'
 
-test('Renders <SuperText /> w/out modifiers', () => {
-  Monet.create({
-    container: { flex: 1 },
-    text: { color: 'red' }
-  }, 'SuperText')
-
-  const ThemedComponent = withTheme('SuperText')(SuperText)
+test('Renders <Head /> w/out modifiers', () => {
+  const ThemedComponent = withTheme('Head')(Head)
   const tree = renderer.create(
     <ThemedComponent />
   ).toJSON()
@@ -18,12 +15,8 @@ test('Renders <SuperText /> w/out modifiers', () => {
   expect(tree).toMatchSnapshot()
 })
 
-test('Renders <SuperText /> with Green modifier', () => {
-  Monet.create({
-    text: { color: 'green' }
-  }, 'SuperText:Green')
-
-  const ThemedComponent = withTheme('SuperText', ['Green'])(SuperText)
+test('Renders <Head /> with Green modifier', () => {
+  const ThemedComponent = withTheme('Head', ['Green'])(Head)
   const tree = renderer.create(
     <ThemedComponent />
   ).toJSON()
